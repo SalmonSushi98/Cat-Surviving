@@ -1,8 +1,8 @@
-body, Button {
-  font-family: 굴림;
+body, button {
+  font-family: "굴림", sans-serif;
   font-size: 1.2rem;
 }
-Button:hover {
+button:hover {
   cursor: pointer;
 }
 #container{
@@ -15,7 +15,7 @@ Button:hover {
   height: 90vw;
 }
 #introWindow{
-  background-image: url(images/intro\ cat.png);
+  background-image: url("images/intro cat.png");
   background-size: contain;
   background-repeat: no-repeat;
   background-color: rgb(245, 245, 245);
@@ -104,6 +104,12 @@ Button:hover {
 #storyDialogue {
   width: 90%;
 }
+#restTimer {
+  width: 90%;
+  margin-top: 0.6rem;
+  font-size: 0.85rem;
+  color: gray;
+}
 #storyOpt {
   height: 30%;
 }
@@ -121,7 +127,7 @@ Button:hover {
   border: 1px solid black;
   background-size: contain;
   background-repeat: no-repeat;
-  background-position: center, center;
+  background-position: center center;
   height: 33%;
 }
 #optBox1 {
@@ -129,11 +135,13 @@ Button:hover {
   height: 100%;
   display: flex;
   flex-wrap: wrap;
-  align-content: space-around;
+  align-content: flex-start;
   justify-content: center;
+  padding-top: 0.6rem;
 }
 .sOpt {
   width: 90%;
+  margin-bottom: 0.8rem;
 }
 .sOpt:hover {
   background-color: lightgray;
@@ -184,7 +192,7 @@ Button:hover {
   background-image: url(images/cat003.png);
   background-size: contain;
   background-repeat: no-repeat;
-  background-position: center, center;
+  background-position: center center;
   width: 15%;
   height: 100%;
 }
@@ -307,5 +315,5 @@ Button:hover {
   transform: translate(-50%, -50%);
   text-align: center;
   font-size: 1.2rem;
-  font-family: 굴림;
+  font-family: "굴림", sans-serif;
 }

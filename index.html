@@ -5,14 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>길고양이로 살아남기</title>
     <link rel="stylesheet" href="style.css">
+    <script src="dialogue.js" defer></script>
     <script src="main.js" defer></script>
   </head>
   <body>
     <div id="container">
       <div id="introWindow">
         <div id="introMenuBoard">
-          <Button class="introMenu">시작하기</Button>
-          <Button class="introMenu">도움말</Button>
+          <button class="introMenu">시작하기</button>
+          <button class="introMenu">도움말</button>
         </div>
       </div>
       <div id="modal">
@@ -29,7 +30,7 @@
           <span id="startDialogue">............<br>.......</span>
         </div>
         <div id="startSelect">
-          <Button id="next">다음</Button>
+          <button id="next">다음</button>
         </div>
         <input id="name" type="text" name="myName">
       </div>
@@ -38,6 +39,7 @@
           <div id="game">
             <div id="story">
               <div id="storyDialogue">무엇을 할까?</div>
+              <div id="restTimer" style="display: none"></div>
             </div>
             <div id="itemBox" style="display: none">
               <table>
@@ -65,7 +67,7 @@
                 <div class="sOpt"></div>
               </div>
               <div id="optBox2">
-                <Button id="storyNext">다음</Button>
+                <button id="storyNext">다음</button>
               </div>
             </div>
             <div id="itemInfo">
