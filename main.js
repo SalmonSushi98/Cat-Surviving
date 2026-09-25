@@ -21,7 +21,6 @@ window.onload = function () {
   const storyOpt = document.querySelector("#storyOpt");
   const nextBtn = document.querySelector("#next");
   const gameMenu = document.querySelector("#gameMenu");
-  const nameInput = document.querySelector("#name");
 
   const story = document.querySelector("#story");
   const storyDia = document.querySelector("#storyDialogue");
@@ -46,6 +45,7 @@ window.onload = function () {
 
   const mainPlaza = document.querySelectorAll(".loc")[0];
   const democracyPlaza = document.querySelectorAll(".loc")[1];
+  const bldgBack = document.querySelectorAll(".loc")[2];
 
   // ---------- Small helpers ----------
   function myDia(el) {
@@ -68,7 +68,7 @@ window.onload = function () {
     a.style.display = "flex";
     b.style.display = "none";
   }
-  function screenChange(modalEl, from, to) {
+  function screenChange(modalEl, from, to, callback) {
     modalEl.style.zIndex = "1";
     modalEl.style.opacity = "1";
     modalEl.style.transition = "1.5s";
@@ -77,6 +77,7 @@ window.onload = function () {
       modalEl.style.opacity = "0";
       from.style.display = "none";
       to.style.display = "block";
+      if (callback) callback();
     }, 1500);
   }
   function getJsonSet2() {
@@ -185,10 +186,8 @@ window.onload = function () {
   function applyIntroStep(step) {
     if (step.style === "my") myDia(startDia);
     else if (step.style === "other") dia(startDia);
-    startDia.innerHTML = typeof step.text === "function" ? step.text(localStorage.getItem("name")) : step.text;
+    startDia.innerHTML = step.text;
     if (step.bg !== undefined) startMain.style.backgroundImage = step.bg ? `url(${step.bg})` : "";
-    if (step.showInput) nameInput.style.display = "block";
-    if (step.hideInput) nameInput.style.display = "none";
   }
 
   startBtn.addEventListener("click", function () {
@@ -203,27 +202,33 @@ window.onload = function () {
     }
   });
 
+  const skipBtn = document.querySelector("#skipBtn");
+
+  function finishIntro() {
+    localStorage.setItem("name", DIALOGUE.playerName);
+    screenChange(whiteModal, startWindow, gameWindow);
+    document.querySelector("#userName").innerText = localStorage.getItem("name");
+    gameMenu.style.zIndex = "-1";
+  }
+
   nextBtn.addEventListener("click", function () {
     const current = introSteps[introIndex];
     if (current.final) {
-      screenChange(whiteModal, startWindow, gameWindow);
-      document.querySelector("#userName").innerText = localStorage.getItem("name");
-      gameMenu.style.zIndex = "-1";
+      finishIntro();
       return;
     }
 
     const next = introSteps[introIndex + 1];
-    if (next.requiresName) {
-      const name = nameInput.value.trim();
-      if (!name) {
-        alert(DIALOGUE.ui.nameRequired);
-        return;
-      }
-      localStorage.setItem("name", name);
+    if (next.setName) {
+      localStorage.setItem("name", DIALOGUE.playerName);
     }
 
     introIndex++;
     applyIntroStep(next);
+  });
+
+  skipBtn.addEventListener("click", function () {
+    finishIntro();
   });
 
   // ================= In-game story dialogue chains =================
@@ -235,7 +240,6 @@ window.onload = function () {
   let chainIndex = 0;
   // Reset whenever the player (re)arrives at 민주광장 — see movePlayer/democracyPlaza below.
   let magpieAskedThisVisit = false;
-  let trashDugThisVisit = false;
 
   function applyChainStep(step) {
     if (step.style === "my") myDia(storyDia);
@@ -339,9 +343,6 @@ window.onload = function () {
   }
   const chainTrashFlavorOnly = [...DIALOGUE.chains.trashFlavorOnly, { final: true, complete: backToMenu }];
   const chainTrashEmpty = [...DIALOGUE.chains.trashEmpty, { final: true, complete: backToMenu }];
-  function buildTrashDigChainWithFlavor(remaining) {
-    return [...DIALOGUE.chains.trashFlavorOnly, { final: true, complete: () => digTrashDirect(remaining) }];
-  }
 
   // --- 민주광장 까치에게 물건 주기 ---
   function offerItemToMagpie(id) {
@@ -442,15 +443,12 @@ window.onload = function () {
         break;
       case "민주광장": {
         const remaining = getTrashRemaining();
+        const questDone = localStorage.getItem("quest_findRing") === "done";
         if (remaining.length === 0) {
           setChain(chainTrashEmpty);
           box1Close(optBox1, optBox2);
-        } else if (!magpieAskedThisVisit) {
+        } else if (!magpieAskedThisVisit && !questDone) {
           setChain(chainTrashFlavorOnly);
-          box1Close(optBox1, optBox2);
-        } else if (!trashDugThisVisit) {
-          trashDugThisVisit = true;
-          setChain(buildTrashDigChainWithFlavor(remaining));
           box1Close(optBox1, optBox2);
         } else {
           digTrashDirect(remaining);
@@ -470,16 +468,7 @@ window.onload = function () {
       return;
     }
     if (storyDia.innerHTML === DIALOGUE.ui.respawnPrompt) {
-      screenChange(whiteModal, introWindow, gameWindow);
-      setTimeout(function () {
-        HP.innerText = "100";
-        place.innerText = "중앙광장";
-        gameMenu.style.zIndex = "0";
-        storyDia.innerHTML = DIALOGUE.ui.menuPrompt;
-        box2Close(optBox1, optBox2);
-        opt1.innerText = DIALOGUE.locations.중앙광장.opt_1;
-        opt2.innerText = DIALOGUE.locations.중앙광장.opt_2;
-      }, 1500);
+      screenChange(whiteModal, gameWindow, introWindow, resetGame);
       return;
     }
     advanceChain();
@@ -599,7 +588,6 @@ window.onload = function () {
     localStorage.removeItem("restEndTime");
     clearDynamicOptions();
     magpieAskedThisVisit = false;
-    trashDugThisVisit = false;
     HP.innerText = "0";
     gameMenu.style.zIndex = "-1";
     dia(storyDia);
@@ -610,6 +598,34 @@ window.onload = function () {
     localStorage.removeItem("jsonSet2");
     localStorage.removeItem("quest_findRing");
     currentChain = null;
+  }
+
+  // Runs after the "처음부터 다시 시작합니다." confirmation: wipes every bit of
+  // saved progress and puts all the in-page state back to a brand new game,
+  // so the next 시작하기 click replays the full intro from scratch.
+  function resetGame() {
+    cancelResting();
+    clearDynamicOptions();
+    currentChain = null;
+    magpieAskedThisVisit = false;
+
+    localStorage.clear();
+    localStorage.setItem("noteInfo", DIALOGUE.noteInfo);
+
+    introIndex = 0;
+    dia(startDia);
+    startDia.innerHTML = DIALOGUE.intro[0].text;
+    startMain.style.backgroundImage = "";
+
+    place.innerText = "중앙광장";
+    HP.innerText = "100";
+    opt1.innerText = DIALOGUE.locations.중앙광장.opt_1;
+    opt2.innerText = DIALOGUE.locations.중앙광장.opt_2;
+    storyDia.innerHTML = DIALOGUE.ui.menuPrompt;
+    box2Close(optBox1, optBox2);
+    story.style.backgroundImage = "";
+    gameMenu.style.zIndex = "-1";
+    renderInventory();
   }
 
   function movePlayer(newPlace, onArrive) {
@@ -651,8 +667,14 @@ window.onload = function () {
   democracyPlaza.addEventListener("click", function () {
     movePlayer("민주광장", () => {
       magpieAskedThisVisit = false;
-      trashDugThisVisit = false;
       renderDemocracyOptions();
+    });
+  });
+
+  bldgBack.addEventListener("click", function () {
+    movePlayer("정경대후문", () => {
+      opt1.innerText = DIALOGUE.locations.정경대후문.opt_1;
+      opt2.innerText = DIALOGUE.locations.정경대후문.opt_2;
     });
   });
 
@@ -662,7 +684,6 @@ window.onload = function () {
   if (savedLocation === "민주광장") {
     place.innerText = savedLocation;
     magpieAskedThisVisit = false;
-    trashDugThisVisit = false;
     renderDemocracyOptions();
   } else {
     place.innerText = savedLocation || "중앙광장";
