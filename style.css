@@ -1,30 +1,75 @@
+/* ============================================================
+   픽셀게임 스타일 팔레트 & 폰트
+   - NeoDunggeunmo(Neo둥근모): 한글 지원 도트(픽셀) 폰트
+   - 로딩 속도를 위해 CDN이 아닌 로컬 파일(./fonts/)로 내장함.
+     index.html과 같은 폴더에 fonts/ 폴더를 함께 두세요.
+   ============================================================ */
+@font-face {
+  font-family: 'NeoDunggeunmo';
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+  src: url('fonts/neodgm.woff2') format('woff2'),
+       url('fonts/neodgm.woff') format('woff');
+}
+
+:root {
+  --pixel-ink: #23262f;        /* 차분한 다크 네이비 잉크 (기존 브라운 계열보다 산뜻함) */
+  --pixel-paper: #fffaf0;      /* 밝은 아이보리 배경 */
+  --pixel-panel: #ffe9b3;      /* 패널/버튼 채움색 - 밝은 버터옐로우 */
+  --pixel-accent: #ff9f45;     /* 호버 시 강조색 - 비비드 오렌지 */
+  --pixel-accent-ink: #7a3e00; /* 강조색 위 텍스트용 진한 톤 */
+  --pixel-hp: #2fae66;         /* 체력 표시용 선명한 그린 */
+  --pixel-shadow: 5px 5px 0 var(--pixel-ink);
+  --pixel-shadow-sm: 3px 3px 0 var(--pixel-ink);
+}
+
 body, button {
-  font-family: "굴림", sans-serif;
+  font-family: 'NeoDunggeunmo', "굴림", sans-serif;
   font-size: 1.2rem;
+  letter-spacing: 0.5px;
+  line-height: 1.5;
+  color: var(--pixel-ink);
+}
+button {
+  border-radius: 0;
 }
 button:hover {
   cursor: pointer;
 }
+
+/* 배경/아이콘 이미지는 계단현상(도트 느낌)이 살도록 렌더링 */
+#introWindow,
+#profile,
+.th,
+#story {
+  image-rendering: pixelated;
+  image-rendering: -moz-crisp-edges;
+  image-rendering: crisp-edges;
+}
+
 #container{
-  border: 2px solid black;
+  border: 5px solid var(--pixel-ink);
+  overflow: hidden;
   position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
   width: 80vw;
   height: 90vw;
+  background-color: var(--pixel-paper);
 }
 #introWindow{
   background-image: url("images/intro cat.png");
   background-size: contain;
   background-repeat: no-repeat;
-  background-color: rgb(245, 245, 245);
+  background-color: var(--pixel-paper);
   width: 100%;
   height: 100%;
   text-align: center;
 }
 #startWindow, #gameWindow{
-  background-color: white;
+  background-color: var(--pixel-paper);
   width: 100%;
   height: 100%;
   display: none;
@@ -38,15 +83,19 @@ button:hover {
   right: 0.5rem;
   padding: 0.15rem 0.5rem;
   font-size: 0.85rem;
-  color: gray;
-  background: none;
-  border: 1px solid gray;
-  border-radius: 4px;
-  z-index: 1;
+  color: var(--pixel-ink);
+  background: var(--pixel-paper);
+  border: 2px solid var(--pixel-ink);
+  border-radius: 0;
+  box-shadow: 2px 2px 0 var(--pixel-ink);
 }
 #skipBtn:hover {
-  color: black;
-  border-color: black;
+  background: var(--pixel-accent);
+  color: var(--pixel-accent-ink);
+}
+#skipBtn:active {
+  box-shadow: none;
+  transform: translate(2px, 2px);
 }
 #startMain {
   background-size: contain;
@@ -64,8 +113,22 @@ button:hover {
   height: 15%;
   text-align: center;
 }
+#next {
+  border: 2px solid var(--pixel-ink);
+  background-color: var(--pixel-panel);
+  box-shadow: var(--pixel-shadow-sm);
+  padding: 0.1rem 0.8rem;
+  font-size: 0.95rem;
+}
+#next:hover {
+  background-color: var(--pixel-accent);
+}
+#next:active {
+  box-shadow: none;
+  transform: translate(3px, 3px);
+}
 #mainArea {
-  border-bottom: 1px solid black;
+  border-bottom: 3px solid var(--pixel-ink);
   width: 100%;
   height: 85%;
   display: flex;
@@ -80,14 +143,15 @@ button:hover {
   cursor: pointer;
 }
 #empty {
-  border-right: 1px solid black;
+  border-right: 3px solid var(--pixel-ink);
   width: 0%;
   height: 100%;
 }
 #game, #location {
   width: 60%;
   height: 100%;
-  font-size: 0.9rem;
+  font-size: 0.85rem;
+  letter-spacing: normal;
 }
 #location {
   flex-direction: column;
@@ -95,25 +159,33 @@ button:hover {
   align-items: center;
 }
 .loc {
-  border-radius: 20px;
-  background-color: gray;
-  color: white;
+  border-radius: 0;
+  border: 2px solid var(--pixel-ink);
+  background-color: var(--pixel-panel);
+  color: var(--pixel-ink);
+  box-shadow: var(--pixel-shadow-sm);
   width: 90%;
   padding: 0.3rem 0;
   text-align: center;
 }
 .loc:hover {
-  background-color: black;
+  background-color: var(--pixel-accent);
+  color: var(--pixel-accent-ink);
   cursor: pointer;
+}
+.loc:active {
+  box-shadow: none;
+  transform: translate(3px, 3px);
 }
 #story, #storyOpt {
   width: 100%;
 }
 #story {
-  border-bottom: 1px solid black;
+  border-bottom: 3px solid var(--pixel-ink);
   background-size: contain;
   background-repeat: no-repeat;
   background-position: center center;
+  background-color: var(--pixel-paper);
   height: 70%;
   text-align: center;
   display: flex;
@@ -127,7 +199,7 @@ button:hover {
   width: 90%;
   margin-top: 0.6rem;
   font-size: 0.85rem;
-  color: gray;
+  color: var(--pixel-ink);
 }
 #storyOpt {
   height: 30%;
@@ -137,13 +209,15 @@ button:hover {
   text-align: center;
 }
 #itemBox > table {
-  border: 1px solid black;
+  border: 3px solid var(--pixel-ink);
   border-spacing: 0.5rem;
   width: 100%;
   height: 100%;
+  background-color: var(--pixel-panel);
 }
 .th {
-  border: 1px solid black;
+  border: 2px solid var(--pixel-ink);
+  background-color: var(--pixel-paper);
   background-size: contain;
   background-repeat: no-repeat;
   background-position: center center;
@@ -154,16 +228,17 @@ button:hover {
   height: 100%;
   display: flex;
   flex-wrap: wrap;
-  align-content: flex-start;
+  align-content: space-evenly;
   justify-content: center;
-  padding-top: 0.6rem;
 }
 .sOpt {
-  width: 90%;
-  margin-bottom: 0.8rem;
+  border: 2px solid transparent;
+  width: 96%;
+  padding: 0.1rem 0;
 }
 .sOpt:hover {
-  background-color: lightgray;
+  border-color: var(--pixel-ink);
+  background-color: var(--pixel-panel);
   cursor: pointer;
 }
 #optBox2 {
@@ -176,6 +251,17 @@ button:hover {
   font-size: 0.9rem;
   position: relative;
   top: 40%;
+  border: 3px solid var(--pixel-ink);
+  background-color: var(--pixel-panel);
+  box-shadow: var(--pixel-shadow-sm);
+  padding: 0.15rem 1rem;
+}
+#storyNext:hover {
+  background-color: var(--pixel-accent);
+}
+#storyNext:active {
+  box-shadow: none;
+  transform: translate(3px, 3px);
 }
 #itemInfo {
   display: none;
@@ -199,8 +285,20 @@ button:hover {
   align-items: center;
 }
 .gameOpt {
-  width: 100%;
-  height: 20%;
+  width: 90%;
+  height: 18%;
+  margin: 0 auto 0.4rem;
+  border: 2px solid var(--pixel-ink);
+  background-color: var(--pixel-panel);
+  box-shadow: var(--pixel-shadow-sm);
+}
+.gameOpt:hover {
+  background-color: var(--pixel-accent);
+  color: var(--pixel-accent-ink);
+}
+.gameOpt:active {
+  box-shadow: none;
+  transform: translate(3px, 3px);
 }
 #infoArea {
   width: 100%;
@@ -208,6 +306,7 @@ button:hover {
   display: flex;
   flex-wrap: nowrap;
   justify-content: space-around;
+  background-color: var(--pixel-panel);
 }
 #profile {
   background-image: url(images/cat003.png);
@@ -218,7 +317,7 @@ button:hover {
   height: 100%;
 }
 #infoArea > table {
-  border-left: 1px solid black;
+  border-left: 3px solid var(--pixel-ink);
   width: 82%;
   height: 100%;
   font-size: 0.9rem;
@@ -231,6 +330,10 @@ button:hover {
 }
 #th4 {
   width: 23%;
+}
+#HP {
+  color: var(--pixel-hp);
+  font-weight: bold;
 }
 @media only screen and (max-width: 720px) {
   #container, #introWindow{
@@ -261,13 +364,25 @@ button:hover {
   flex-wrap: wrap;
   justify-content: space-around;
   align-content: space-around;
-  border-radius: 10px;
-  background-color: gray;
+  border-radius: 0;
+  border: 3px solid var(--pixel-ink);
+  background-color: var(--pixel-panel);
 }
 .introMenu{
+  border: 3px solid var(--pixel-ink);
+  background-color: var(--pixel-paper);
+  box-shadow: var(--pixel-shadow-sm);
   width: 90%;
   height: 40%;
-  font-size: 2.5rem;
+  font-size: 2.2rem;
+}
+.introMenu:hover {
+  background-color: var(--pixel-accent);
+  color: var(--pixel-accent-ink);
+}
+.introMenu:active {
+  box-shadow: none;
+  transform: translate(3px, 3px);
 }
 #copyright{
   display: none;
@@ -286,7 +401,7 @@ button:hover {
   background-color: rgb(0, 0, 0, 0.3);
 }
 #whiteModal {
-  background-color: white;
+  background-color: var(--pixel-paper);
   opacity: 0;
 }
 #popup{
@@ -296,7 +411,9 @@ button:hover {
   transform: translate(-50%, -50%);
   width: 80%;
   height: 80%;
-  background-color: white;
+  background-color: var(--pixel-paper);
+  border: 4px solid var(--pixel-ink);
+  overflow: hidden;
 }
 #modalContent{
   position: absolute;
@@ -306,16 +423,18 @@ button:hover {
   width: 80%;
   height: 90%;
   padding: 0 1rem 0;
-  background-color: rgb(46, 70, 102);
-  color: white;
+  background-color: var(--pixel-ink);
+  color: var(--pixel-paper);
+  border: 3px solid var(--pixel-panel);
 }
 .close{
   float: right;
   font-size: 3rem;
   font-weight: bold;
+  color: var(--pixel-paper);
 }
 .close:hover{
-  color: yellow;
+  color: var(--pixel-accent);
   text-decoration: none;
   cursor: pointer;
 }
@@ -327,5 +446,5 @@ button:hover {
   transform: translate(-50%, -50%);
   text-align: center;
   font-size: 1.2rem;
-  font-family: "굴림", sans-serif;
+  font-family: 'NeoDunggeunmo', "굴림", sans-serif;
 }

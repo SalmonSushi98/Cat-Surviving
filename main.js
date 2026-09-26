@@ -685,8 +685,16 @@ window.onload = function () {
     place.innerText = savedLocation;
     magpieAskedThisVisit = false;
     renderDemocracyOptions();
+  } else if (savedLocation && DIALOGUE.locations[savedLocation]) {
+    // 민주광장 외에 옵션이 구현된 장소(현재는 중앙광장/정경대후문)는
+    // 저장된 위치 이름에 맞는 옵션 문구를 그대로 복원한다.
+    place.innerText = savedLocation;
+    opt1.innerText = DIALOGUE.locations[savedLocation].opt_1;
+    opt2.innerText = DIALOGUE.locations[savedLocation].opt_2;
   } else {
-    place.innerText = savedLocation || "중앙광장";
+    // 저장된 위치가 없거나(첫 방문) 아직 옵션이 구현되지 않은 장소라면
+    // 중앙광장으로 안전하게 되돌린다.
+    place.innerText = "중앙광장";
     opt1.innerText = DIALOGUE.locations.중앙광장.opt_1;
     opt2.innerText = DIALOGUE.locations.중앙광장.opt_2;
   }
