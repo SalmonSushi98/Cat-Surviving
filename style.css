@@ -30,6 +30,16 @@ body, button {
   letter-spacing: 0.5px;
   line-height: 1.5;
   color: var(--pixel-ink);
+  /* 모바일 브라우저(특히 크롬/삼성인터넷)가 좁은 버튼 안 텍스트를 임의로
+     확대하는 "font boosting"을 막음 — 버튼 크기와 글자 크기 비율이
+     기기마다 달라지는 문제의 주 원인이었음. */
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+  /* 한글은 스페이스 없이도 아무 글자 사이에서나 줄바꿈될 수 있어서
+     "돌아다닌다." 같은 한 단어가 중간에 잘려 다음 줄로 넘어가는
+     문제가 있었음. keep-all로 단어(스페이스) 단위로만 줄바꿈되게 함. */
+  word-break: keep-all;
+  overflow-wrap: break-word;
 }
 button {
   border-radius: 0;
@@ -87,6 +97,10 @@ button:hover {
   border: 2px solid var(--pixel-ink);
   border-radius: 0;
   box-shadow: 2px 2px 0 var(--pixel-ink);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  white-space: nowrap;
 }
 #skipBtn:hover {
   background: var(--pixel-accent);
@@ -119,6 +133,10 @@ button:hover {
   box-shadow: var(--pixel-shadow-sm);
   padding: 0.1rem 0.8rem;
   font-size: 0.95rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  white-space: nowrap;
 }
 #next:hover {
   background-color: var(--pixel-accent);
@@ -167,6 +185,10 @@ button:hover {
   width: 90%;
   padding: 0.3rem 0;
   text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  white-space: nowrap;
 }
 .loc:hover {
   background-color: var(--pixel-accent);
@@ -258,6 +280,10 @@ button:hover {
   background-color: var(--pixel-panel);
   box-shadow: var(--pixel-shadow-sm);
   padding: 0.1rem 0.8rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  white-space: nowrap;
 }
 #storyNext:hover {
   background-color: var(--pixel-accent);
@@ -294,6 +320,11 @@ button:hover {
   border: 2px solid var(--pixel-ink);
   background-color: var(--pixel-panel);
   box-shadow: var(--pixel-shadow-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  white-space: nowrap;
 }
 .gameOpt:hover {
   background-color: var(--pixel-accent);
@@ -333,6 +364,16 @@ button:hover {
     max-width: 330px;
     max-height: 350px;
   }
+  /* 컨테이너가 80vw(최대 330px)로 줄어드는 폭에 맞춰 버튼 글자 크기도
+     화면 폭에 비례해서 줄어들게 함(clamp 최소/최대값으로 너무 작아지거나
+     커지는 것은 막음). 데스크탑/태블릿 크기(위쪽 두 미디어쿼리)는 그대로
+     기존 rem 값을 씀 — 거기서는 깨짐 현상이 없었기 때문. */
+  .gameOpt {
+    font-size: clamp(0.68rem, 3.6vw, 1.05rem);
+  }
+  .loc {
+    font-size: clamp(0.62rem, 3vw, 0.95rem);
+  }
 }
 @media only screen and (min-width: 720px) {
   #container, #introWindow{
@@ -368,6 +409,10 @@ button:hover {
   width: 90%;
   height: 40%;
   font-size: 2.2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  white-space: nowrap;
 }
 .introMenu:hover {
   background-color: var(--pixel-accent);
@@ -376,6 +421,11 @@ button:hover {
 .introMenu:active {
   box-shadow: none;
   transform: translate(3px, 3px);
+}
+@media only screen and (max-width: 720px) {
+  .introMenu {
+    font-size: clamp(1.3rem, 6.4vw, 2rem);
+  }
 }
 #copyright{
   display: none;
