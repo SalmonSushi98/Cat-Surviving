@@ -443,11 +443,14 @@ window.onload = function () {
         break;
       case "민주광장": {
         const remaining = getTrashRemaining();
-        const questDone = localStorage.getItem("quest_findRing") === "done";
+        // "on"이든 "done"이든 퀘스트가 한 번이라도 시작됐다면, 새로고침으로
+        // magpieAskedThisVisit이 초기화돼도 다시 까치에게 말을 걸 필요 없이
+        // 바로 물건을 고르는 화면으로 넘어가야 한다.
+        const questStarted = localStorage.getItem("quest_findRing") !== null;
         if (remaining.length === 0) {
           setChain(chainTrashEmpty);
           box1Close(optBox1, optBox2);
-        } else if (!magpieAskedThisVisit && !questDone) {
+        } else if (!magpieAskedThisVisit && !questStarted) {
           setChain(chainTrashFlavorOnly);
           box1Close(optBox1, optBox2);
         } else {

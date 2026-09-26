@@ -15,7 +15,7 @@
 
 :root {
   --pixel-ink: #23262f;        /* 차분한 다크 네이비 잉크 (기존 브라운 계열보다 산뜻함) */
-  --pixel-paper: #fffaf0;      /* 밝은 아이보리 배경 */
+  --pixel-paper: #ffffff;      /* 순백색 배경 */
   --pixel-panel: #ffe9b3;      /* 패널/버튼 채움색 - 밝은 버터옐로우 */
   --pixel-accent: #ff9f45;     /* 호버 시 강조색 - 비비드 오렌지 */
   --pixel-accent-ink: #7a3e00; /* 강조색 위 텍스트용 진한 톤 */
@@ -40,7 +40,6 @@ button:hover {
 
 /* 배경/아이콘 이미지는 계단현상(도트 느낌)이 살도록 렌더링 */
 #introWindow,
-#profile,
 .th,
 #story {
   image-rendering: pixelated;
@@ -247,22 +246,25 @@ button:hover {
   height: 100%;
   text-align: center;
   display: none;
+  position: relative;
 }
 #storyNext {
-  font-size: 0.9rem;
-  position: relative;
-  top: 40%;
-  border: 3px solid var(--pixel-ink);
+  font-size: 0.85rem;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  border: 2px solid var(--pixel-ink);
   background-color: var(--pixel-panel);
   box-shadow: var(--pixel-shadow-sm);
-  padding: 0.15rem 1rem;
+  padding: 0.1rem 0.8rem;
 }
 #storyNext:hover {
   background-color: var(--pixel-accent);
 }
 #storyNext:active {
   box-shadow: none;
-  transform: translate(3px, 3px);
+  transform: translate(calc(-50% + 3px), calc(-50% + 3px));
 }
 #itemInfo {
   display: none;
@@ -309,28 +311,18 @@ button:hover {
   justify-content: space-around;
   background-color: var(--pixel-panel);
 }
-#profile {
-  background-image: url(images/cat003.png);
-  background-size: contain;
-  background-repeat: no-repeat;
-  background-position: center center;
-  width: 15%;
-  height: 100%;
-}
 #infoArea > table {
-  border-left: 3px solid var(--pixel-ink);
-  width: 82%;
+  width: 100%;
   height: 100%;
   font-size: 0.9rem;
 }
-#th1, #th3 {
-  width: 17%;
+#infoArea > table th:nth-child(1),
+#infoArea > table th:nth-child(3) {
+  width: 15%;
 }
-#userName {
-  width: 43%;
-}
-#th4 {
-  width: 23%;
+#infoArea > table th:nth-child(2),
+#infoArea > table th:nth-child(4) {
+  width: 35%;
 }
 #HP {
   color: var(--pixel-hp);
@@ -371,7 +363,7 @@ button:hover {
 }
 .introMenu{
   border: 3px solid var(--pixel-ink);
-  background-color: var(--pixel-paper);
+  background-color: #fffaf0;
   box-shadow: var(--pixel-shadow-sm);
   width: 90%;
   height: 40%;
