@@ -250,7 +250,7 @@ button:hover {
   height: 100%;
   display: flex;
   flex-wrap: wrap;
-  align-content: space-evenly;
+  align-content: space-between;
   justify-content: center;
 }
 .sOpt {
@@ -354,6 +354,12 @@ button:hover {
   vertical-align: middle;
   line-height: 1.25;
 }
+#infoArea tr:nth-child(1) th {
+  vertical-align: bottom;
+}
+#infoArea tr:nth-child(2) th {
+  vertical-align: top;
+}
 #infoArea > table th:nth-child(1),
 #infoArea > table th:nth-child(3) {
   width: 15%;
@@ -390,7 +396,7 @@ button:hover {
   /* 정보 테이블(이름/체력/위치/상태) 글자를 줄여서 두 줄이 칸 안에서
      위아래 여백을 두고 가운데 오도록 함. */
   #infoArea > table {
-    font-size: clamp(0.58rem, 2.9vw, 0.78rem);
+    font-size: clamp(0.68rem, 3.3vw, 0.88rem);
   }
 }
 @media only screen and (min-width: 720px) {
