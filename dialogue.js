@@ -38,7 +38,7 @@ const DIALOGUE = {
   // ---------------- Items (도구함) ----------------
   items: {
     note: { image: "images/note.png", info: () => localStorage.getItem("noteInfo") },
-    meat: { image: "images/meat.png", info: "먹으면 탈이 날 것 같은 고기다.", label: "▶ 썩은 고기" },
+    meat: { image: "images/meat.png", info: "먹으면 탈이 날 것 같은 상한 고기다.", label: "▶ 썩은 고기" },
     bead: { image: "images/bead.png", info: "까치가 좋아할 만한 반짝거리는 구슬이다.", label: "▶ 반짝거리는 구슬" },
     movieTicket: { image: "images/movieTicket.png", info: "세 달 전에 개봉했던 영화 티켓이다.", label: "▶ 영화 티켓" },
     ring: { image: "images/ring.png", info: "누군가와 커플로 맞춘 것 같은 반지다." },
