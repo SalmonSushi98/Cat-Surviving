@@ -248,11 +248,22 @@ button:hover {
 #optBox1 {
   width: 100%;
   height: 100%;
-  display: flex;
-  flex-wrap: wrap;
-  align-content: space-between;
-  justify-content: center;
+  box-sizing: border-box;
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: repeat(3, 1fr);
+  row-gap: 0.3rem;
+  /* 옵션 박스 상/하단에 남는 여백. 1번 옵션 위쪽 여백과 마지막 옵션
+     아래쪽 여백이 이 값으로 항상 같아짐. */
+  padding: 0.5rem 0;
+  justify-items: center;
+  align-items: center;
 }
+/* 옵션 div는 항상 3개가 DOM에 존재하지만 필요 없는 건 JS에서
+   display:none으로 숨김. grid-row를 개별 지정하지 않고 grid의
+   기본 자동 배치에 맡기면, 숨겨진(=레이아웃에서 제외된) 옵션은
+   그냥 건너뛰고 "보이는 옵션"들이 항상 위 칸부터 차례로 채워짐 —
+   옵션이 1개든 2개든 3개든 첫 번째로 보이는 옵션은 항상 맨 위. */
 .sOpt {
   border: 2px solid transparent;
   width: 96%;
@@ -354,12 +365,6 @@ button:hover {
   vertical-align: middle;
   line-height: 1.25;
 }
-#infoArea tr:nth-child(1) th {
-  vertical-align: bottom;
-}
-#infoArea tr:nth-child(2) th {
-  vertical-align: top;
-}
 #infoArea > table th:nth-child(1),
 #infoArea > table th:nth-child(3) {
   width: 15%;
@@ -397,6 +402,17 @@ button:hover {
      위아래 여백을 두고 가운데 오도록 함. */
   #infoArea > table {
     font-size: clamp(0.68rem, 3.3vw, 0.88rem);
+  }
+  /* 모바일에서만: 첫째 줄은 아래로, 둘째 줄은 위로 당기되(원래보다는
+     가깝게), padding으로 최소 간격을 남겨서 두 줄이 완전히 붙지는
+     않도록 함. PC(위 규칙 밖)는 vertical-align: middle 그대로 유지됨. */
+  #infoArea tr:nth-child(1) th {
+    vertical-align: bottom;
+    padding-bottom: 0.3em;
+  }
+  #infoArea tr:nth-child(2) th {
+    vertical-align: top;
+    padding-top: 0.3em;
   }
 }
 @media only screen and (min-width: 720px) {

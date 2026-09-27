@@ -65,7 +65,7 @@ window.onload = function () {
     b.style.display = "block";
   }
   function box2Close(a, b) {
-    a.style.display = "flex";
+    a.style.display = "grid";
     b.style.display = "none";
   }
   function screenChange(modalEl, from, to, callback) {
