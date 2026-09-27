@@ -3,6 +3,13 @@
 window.onload = function () {
   localStorage.setItem("noteInfo", DIALOGUE.noteInfo);
 
+  // 인트로/스토리 진행 중에 필요한 배경·아이템 이미지를 미리 받아두기
+  // 시작. new Image()로 요청만 걸어두면 브라우저가 백그라운드에서
+  // 병렬로 캐시에 채워두고, 실제로 그 배경이 화면에 쓰일 때는 이미
+  // 캐시에 있으니 바로 표시됨(렌더링을 막지 않으므로 시작 화면이
+  // 느려지지 않음 — 아래 preloadImages() 정의 참고).
+  preloadImages();
+
   // ---------- Element refs ----------
   const startBtn = document.querySelectorAll(".introMenu")[0];
   const helpBtn = document.querySelectorAll(".introMenu")[1];
@@ -48,6 +55,35 @@ window.onload = function () {
   const bldgBack = document.querySelectorAll(".loc")[2];
 
   // ---------- Small helpers ----------
+  function preloadImages() {
+    const urls = new Set();
+
+    // 인트로 대사 중간중간 바뀌는 배경
+    DIALOGUE.intro.forEach(function (step) {
+      if (step.bg) urls.add(step.bg);
+    });
+
+    // 장소별 스토리 체인 중간중간 바뀌는 배경
+    Object.values(DIALOGUE.chains).forEach(function (chain) {
+      chain.forEach(function (step) {
+        if (step.bg) urls.add(step.bg);
+      });
+    });
+
+    // 도구함 아이템 아이콘
+    Object.values(DIALOGUE.items).forEach(function (item) {
+      if (item.image) urls.add(item.image);
+    });
+
+    // CSS 배경(인트로 타이틀 화면)은 DIALOGUE에 없으니 직접 추가.
+    // 다른 배경들과 함께 같은 큐에서 받아지므로 우선순위 차이가 없음.
+    urls.add("images/intro cat.png");
+
+    urls.forEach(function (url) {
+      const img = new Image();
+      img.src = url;
+    });
+  }
   function myDia(el) {
     el.style.color = "blue";
     el.style.fontWeight = "bold";
